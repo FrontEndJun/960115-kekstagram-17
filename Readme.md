@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Гоша Кондрев](https://up.htmlacademy.ru/javascript/17/user/960115).
-* Наставник: `Неизвестно`.
+* Наставник: [Андрей Фидельман] (https://htmlacademy.ru/profile/id773165).
 
 ---
 
