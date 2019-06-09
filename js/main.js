@@ -1,3 +1,4 @@
+'use strict';
 var descriptions = [];
 var userComments = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
