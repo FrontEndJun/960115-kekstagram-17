@@ -198,14 +198,14 @@ var sliderElem = document.querySelector('.effect-level__line');
 var thumbElem = document.querySelector('.effect-level__pin');
 var progressLine = document.querySelector('.effect-level__depth');
 
-thumbElem.onmousedown = function(e) {
+thumbElem.onmousedown = function (e) {
   var thumbCoords = getCoords(thumbElem);
   var shiftX = e.pageX - thumbCoords.left;
   var sliderCoords = getCoords(sliderElem);
   var rightEdge = sliderElem.offsetWidth;
 
-  document.onmousemove = function (e) {
-    var newLeft = e.pageX - shiftX - sliderCoords.left;
+  document.onmousemove = function (evt) {
+    var newLeft = evt.pageX - shiftX - sliderCoords.left;
     if (newLeft < 0) {
       newLeft = 0;
     }
