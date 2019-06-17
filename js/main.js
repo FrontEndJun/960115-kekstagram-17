@@ -222,7 +222,8 @@ thumbElem.onmousedown = function (e) {
   };
 
   document.onmouseup = function () {
-    document.onmousemove = document.onmouseup = null;
+    document.onmousemove = null;
+    document.onmouseup = null;
   };
 
   return false; // disable selection start (cursor change)
