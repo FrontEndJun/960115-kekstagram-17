@@ -122,6 +122,7 @@ var scaleVal = scaleInput.value.split('%')[0];
 var effectLevel = document.querySelector('.img-upload__effect-level');
 var effectValInput = document.querySelector('.effect-level__value');
 // var effectVal = effectValInput.value;
+var isInputFocused = false;
 
 var closeLoadPreview = function () {
   uploadPreview.classList.add('hidden');
@@ -131,7 +132,9 @@ var closeLoadPreview = function () {
 };
 var onPreviewEscPress = function (e) {
   if (e.keyCode === 27) {
-    closeLoadPreview();
+    if (!isInputFocused) {
+      closeLoadPreview();
+    }
   }
 };
 
@@ -243,3 +246,12 @@ function getCoords(elem) { // кроме IE8-
   };
 }
 
+var commentInput = document.querySelector('.text__description');
+
+commentInput.addEventListener('focus', function () {
+  isInputFocused = true;
+});
+
+commentInput.addEventListener('blur', function () {
+  isInputFocused = false;
+});
