@@ -121,10 +121,10 @@ var scaleVal = scaleInput.value.split('%')[0];
 
 var effectLevel = document.querySelector('.img-upload__effect-level');
 var effectValInput = document.querySelector('.effect-level__value');
-// var effectVal = effectValInput.value;
 var isInputFocused = false;
 
 var closeLoadPreview = function () {
+  isInputFocused = false;
   uploadPreview.classList.add('hidden');
   uploadFile.value = '';
   document.removeEventListener('keydown', onPreviewEscPress);
@@ -169,7 +169,7 @@ var renderPreviewImage = function (val) {
   previewImg.style.filter = currEffect.style + '(' + val + currEffect.units + ')';
 };
 
-var currEffect;// = effectsList['none'];
+var currEffect;
 for (var i = 0; i < effectsRadio.length; i++) {
   effectsRadio[i].addEventListener('click', function (e) {
     var effectName = e.target.value;
@@ -229,7 +229,7 @@ thumbElem.onmousedown = function (e) {
     document.onmouseup = null;
   };
 
-  return false; // disable selection start (cursor change)
+  return false;
 };
 
 thumbElem.ondragstart = function () {
@@ -255,3 +255,6 @@ commentInput.addEventListener('focus', function () {
 commentInput.addEventListener('blur', function () {
   isInputFocused = false;
 });
+
+var test = {}; //
+test.a = 2;// для пуллреквеста
