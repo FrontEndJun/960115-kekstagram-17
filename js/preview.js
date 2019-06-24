@@ -1,38 +1,37 @@
-
 'use strict';
-var effectsList = {
-  'chrome': {
-    style: 'grayscale',
-    min: 0,
-    max: 1,
-    units: ''
-  },
-  'sepia': {
-    style: 'sepia',
-    min: 0,
-    max: 1,
-    units: ''
-  },
-  'marvin': {
-    style: 'invert',
-    min: 0,
-    max: 100,
-    units: '%'
-  },
-  'phobos': {
-    style: 'blur',
-    min: 0,
-    max: 3,
-    units: 'px'
-  },
-  'heat': {
-    style: 'brightness',
-    min: 1,
-    max: 3,
-    units: ''
-  },
-};
 (function () {
+  var effectsList = {
+    'chrome': {
+      style: 'grayscale',
+      min: 0,
+      max: 1,
+      units: ''
+    },
+    'sepia': {
+      style: 'sepia',
+      min: 0,
+      max: 1,
+      units: ''
+    },
+    'marvin': {
+      style: 'invert',
+      min: 0,
+      max: 100,
+      units: '%'
+    },
+    'phobos': {
+      style: 'blur',
+      min: 0,
+      max: 3,
+      units: 'px'
+    },
+    'heat': {
+      style: 'brightness',
+      min: 1,
+      max: 3,
+      units: ''
+    },
+  };
   var previewImg = document.querySelector('.img-upload__preview img');
 
   var uploadFile = document.getElementById('upload-file');
