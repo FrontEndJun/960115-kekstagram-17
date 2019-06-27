@@ -12,9 +12,12 @@
     templateItem.querySelector('.picture__likes').textContent = photoDescr.likes;
     fragment.appendChild(templateItem);
   };
-  var desc = window.createRandomImgsData(25);
-  for (var i = 0; i < desc.length; i++) {
-    createFragmentItem(desc[i]);
-  }
-  picturesBlock.appendChild(fragment);
+
+  window.getAjax('GET', 'https://js.dump.academy/kekstagram/data', function (data) {
+    for (var i = 0; i < data.length; i++) {
+      createFragmentItem(data[i]);
+    }
+    picturesBlock.appendChild(fragment);
+  });
+
 })();
