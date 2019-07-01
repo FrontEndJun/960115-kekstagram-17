@@ -3,7 +3,7 @@
   window.getAjax = function (method, url, callback) {
     var xhr = new XMLHttpRequest();
     var res = 0;
-    xhr.onlo = function () {
+    xhr.onreadystatechange = function () {
       if (xhr.status === 200 && xhr.readyState === 4) {
         try {
           res = JSON.parse(xhr.responseText);
