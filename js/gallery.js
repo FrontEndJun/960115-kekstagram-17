@@ -93,7 +93,7 @@
     fragment.appendChild(templateItem);
   };
 
-  var comments = document.createDocumentFragment();
+  // var comments = document.createDocumentFragment();
   var commentInner = document.createElement('li');
   commentInner.classList.add('social__comment');
   var commentImg = document.createElement('img');
@@ -115,7 +115,7 @@
     bigPic.querySelector('.comments-count').textContent = pics[0].comments.length;
     bigPic.querySelector('.social__caption').textContent = pics[0].description;
     for (var i = 0; i < pics[0].comments.length; i++) {
-      var c = commentInner.cloneNode(true)
+      var c = commentInner.cloneNode(true);
       c.querySelector('img').src = pics[0].comments[i].avatar;
       c.querySelector('p').innerHTML = pics[0].comments[i].message;
 
