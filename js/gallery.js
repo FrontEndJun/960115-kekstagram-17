@@ -109,7 +109,6 @@
     pics = data;
     renderGallery(pics);
     imgFilters.classList.remove('img-filters--inactive');
-    debugger
     bigPic.classList.remove('hidden');
     bigPic.querySelector('.big-picture__img img').src = pics[0].url;
     bigPic.querySelector('.likes-count').textContent = pics[0].likes;
@@ -123,7 +122,8 @@
       // comments.appendChild(commentInner);
       bigPic.querySelector('.social__comments').appendChild(c);
     }
-
+    bigPic.querySelector('.social__comment-count').classList.add('hidden');
+    bigPic.querySelector('.comments-loader').classList.add('hidden');
   });
 
 })();
