@@ -1,7 +1,8 @@
 'use strict';
 (function () {
   var timer;
-  var pics = [];
+  var picsData = [];
+  var currentData = [];
   var template = document.querySelector('#picture').content;
   var fragment = document.createDocumentFragment();
   var picturesBlock = document.querySelector('.pictures');
@@ -29,29 +30,30 @@
   };
 
   var onPopularClickHandler = function () {
+    currentData = picsData;
     if (timer) {
       clearTimeout(timer);
     }
     timer = setTimeout(function () {
-      renderGallery(pics);
+      renderGallery(currentData);
     }, 500);
   };
 
   var onNewClickHandler = function () {
-    var filtered = pics.slice().sort(function () {
+    currentData = picsData.slice().sort(function () {
       return Math.random() - 0.5;
     }).slice(0, 10);
     if (timer) {
       clearTimeout(timer);
     }
     timer = setTimeout(function () {
-      renderGallery(filtered);
+      renderGallery(currentData);
     }, 500);
   };
 
   var onDiscClickHandler = function () {
-    var filtered = pics.slice();
-    filtered.sort(function (a, b) {
+    currentData = picsData.slice();
+    currentData.sort(function (a, b) {
       if (a.comments.length > b.comments.length) {
         return -1;
       }
@@ -64,7 +66,7 @@
       clearTimeout(timer);
     }
     timer = setTimeout(function () {
-      renderGallery(filtered);
+      renderGallery(currentData);
     }, 500);
   };
 
@@ -133,13 +135,13 @@
     }
   };
   window.getAjax('GET', 'https://js.dump.academy/kekstagram/data', function (data) {
-    pics = data;
-    renderGallery(pics);
+    picsData = data;
+    currentData = data;
+    renderGallery(data);
     imgFilters.classList.remove('img-filters--inactive');
-    var pictures = picturesBlock.querySelectorAll('.picture');
     picturesBlock.addEventListener('click', function (e) {
       var closeBigPictureButton = bigPic.querySelector('#picture-cancel');
-
+      var pictures = picturesBlock.querySelectorAll('.picture');
       closeBigPictureButton.addEventListener('click', closeBigPicture);
       document.addEventListener('keydown', onBigPictureEscPress);
 
@@ -147,7 +149,7 @@
       pictures.forEach(function (elm, i) {
         while (tg !== picturesBlock) {
           if (tg === elm) {
-            showBigPicture(data[i]);
+            showBigPicture(currentData[i]);
           }
           tg = tg.parentNode;
         }
