@@ -11,6 +11,7 @@
   var filterPopular = filterForm.querySelector('#filter-popular');
   var filterNew = filterForm.querySelector('#filter-new');
   var filterDisc = filterForm.querySelector('#filter-discussed');
+  var bigPic = document.querySelector('.big-picture');
 
   var renderGallery = function (p) {
     clearGallery();
@@ -92,10 +93,37 @@
     fragment.appendChild(templateItem);
   };
 
+  // var comments = document.createDocumentFragment();
+  var commentInner = document.createElement('li');
+  commentInner.classList.add('social__comment');
+  var commentImg = document.createElement('img');
+  commentImg.classList.add('social__picture');
+  commentImg.alt = 'Аватар комментатора фотографии';
+  commentImg.width = '35';
+  commentImg.height = '35';
+  var commentText = document.createElement('p');
+  commentText.classList.add('social__text');
+  commentInner.appendChild(commentImg);
+  commentInner.appendChild(commentText);
   window.getAjax('GET', 'https://js.dump.academy/kekstagram/data', function (data) {
     pics = data;
     renderGallery(pics);
     imgFilters.classList.remove('img-filters--inactive');
+    bigPic.classList.remove('hidden');
+    bigPic.querySelector('.big-picture__img img').src = pics[0].url;
+    bigPic.querySelector('.likes-count').textContent = pics[0].likes;
+    bigPic.querySelector('.comments-count').textContent = pics[0].comments.length;
+    bigPic.querySelector('.social__caption').textContent = pics[0].description;
+    for (var i = 0; i < pics[0].comments.length; i++) {
+      var c = commentInner.cloneNode(true);
+      c.querySelector('img').src = pics[0].comments[i].avatar;
+      c.querySelector('p').innerHTML = pics[0].comments[i].message;
+
+      // comments.appendChild(commentInner);
+      bigPic.querySelector('.social__comments').appendChild(c);
+    }
+    bigPic.querySelector('.social__comment-count').classList.add('hidden');
+    bigPic.querySelector('.comments-loader').classList.add('hidden');
   });
 
 })();
