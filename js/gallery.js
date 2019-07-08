@@ -107,6 +107,10 @@
   commentInner.appendChild(commentImg);
   commentInner.appendChild(commentText);
   var showBigPicture = function (pic) {
+    var comments = bigPic.querySelector('.social__comments');
+    while (comments.firstChild) {
+      comments.removeChild(comments.firstChild);
+    }
     bigPic.querySelector('.social__comment-count').classList.add('hidden');
     bigPic.querySelector('.comments-loader').classList.add('hidden');
     bigPic.classList.remove('hidden');
@@ -120,7 +124,7 @@
       c.querySelector('p').innerHTML = comm.message;
 
       // comments.appendChild(commentInner);
-      bigPic.querySelector('.social__comments').appendChild(c);
+      comments.appendChild(c);
     });
   };
 
