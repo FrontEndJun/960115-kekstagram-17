@@ -139,7 +139,7 @@
 
   var findPic = function (arr, source) {
     return arr.find(function (picture) {
-      return picture.url == source;
+      return picture.url === source;
     });
   };
 
