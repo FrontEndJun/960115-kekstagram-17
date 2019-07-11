@@ -30,30 +30,28 @@
   };
 
   var onPopularClickHandler = function () {
-    currentData = picsData;
     if (timer) {
       clearTimeout(timer);
     }
     timer = setTimeout(function () {
-      renderGallery(currentData);
+      renderGallery(picsData.slice());
     }, 500);
   };
 
   var onNewClickHandler = function () {
-    currentData = picsData.slice().sort(function () {
+    var sortedData = picsData.slice().sort(function () {
       return Math.random() - 0.5;
     }).slice(0, 10);
     if (timer) {
       clearTimeout(timer);
     }
     timer = setTimeout(function () {
-      renderGallery(currentData);
+      renderGallery(sortedData);
     }, 500);
   };
 
   var onDiscClickHandler = function () {
-    currentData = picsData.slice();
-    currentData.sort(function (a, b) {
+    var sortedData = picsData.slice().sort(function (a, b) {
       if (a.comments.length > b.comments.length) {
         return -1;
       }
@@ -66,7 +64,7 @@
       clearTimeout(timer);
     }
     timer = setTimeout(function () {
-      renderGallery(currentData);
+      renderGallery(sortedData);
     }, 500);
   };
 
@@ -138,9 +136,15 @@
       closeBigPicture();
     }
   };
+
+  var findPic = function (arr, source) {
+    return arr.find(function (picture) {
+      return picture.url == source;
+    });
+  };
+
   window.getAjax('GET', 'https://js.dump.academy/kekstagram/data', function (data) {
     picsData = data;
-    currentData = data;
     renderGallery(data);
     imgFilters.classList.remove('img-filters--inactive');
     picturesBlock.addEventListener('click', function (e) {
@@ -148,12 +152,13 @@
       var pictures = picturesBlock.querySelectorAll('.picture');
       closeBigPictureButton.addEventListener('click', closeBigPicture);
       document.addEventListener('keydown', onBigPictureEscPress);
-
       var tg = e.target;
-      pictures.forEach(function (elm, i) {
+      pictures.forEach(function (elm) {
         while (tg !== picturesBlock) {
           if (tg === elm) {
-            showBigPicture(currentData[i]);
+            var picSource = elm.querySelector('img').getAttribute('src');
+            var picture = findPic(picsData, picSource);
+            showBigPicture(picture);
           }
           tg = tg.parentNode;
         }
