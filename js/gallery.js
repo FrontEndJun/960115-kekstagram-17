@@ -2,7 +2,6 @@
 (function () {
   var timer;
   var picsData = [];
-  var currentData = [];
   var template = document.querySelector('#picture').content;
   var fragment = document.createDocumentFragment();
   var picturesBlock = document.querySelector('.pictures');
