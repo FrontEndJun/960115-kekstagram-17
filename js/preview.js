@@ -187,7 +187,6 @@ var hashtagsInput = document.querySelector('.text__hashtags');
     hashtagsInput.setCustomValidity('');
     var err = validateHashtags();
     if (err) {
-      setTimeout(hashtagsInput.checkValidity(), 2000)
       hashtagsInput.setCustomValidity(err);
       e.preventDefault();
     }
