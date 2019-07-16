@@ -183,12 +183,15 @@ var hashtagsInput = document.querySelector('.text__hashtags');
     return error;
   };
 
-  uploadForm.onsubmit = function (e) {
-    hashtagsInput.setCustomValidity('');
+  uploadForm.addEventListener('submit', function (e) {
     var err = validateHashtags();
-    if (err) {
-      hashtagsInput.setCustomValidity(err);
+    hashtagsInput.setCustomValidity(err);
+    if (!hashtagsInput.checkValidity()) {
       e.preventDefault();
+      hashtagsInput.onchange = function () {
+        hashtagsInput.setCustomValidity('');
+      };
     }
-  };
+    hashtagsInput.onchange = null;
+  });
 })();
