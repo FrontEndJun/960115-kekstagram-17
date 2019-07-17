@@ -174,12 +174,19 @@ var hashtagsInput = document.querySelector('.text__hashtags');
 
   var validateHashtags = function () {
     var error = '';
-    var hashtags = hashtagsInput.value.trim().split(' ');
+    var hashtagsVal = hashtagsInput.value.trim();
+    if (hashtagsVal.match(/(#[-\w]{1,19}\b)(\s)(\1|.+\1\b)/gi)) {
+      error = 'Хэштеги не должны повторяться';
+    }
+    var hashtags = hashtagsVal.split(' ');
     hashtags.forEach(function (hashtag) {
       if (!hashtag.match(/#[-\w]{1,19}\b\s?/)) {
-        error = 'ВВедите корректный хэш';
+        error = 'Хэштег слишком длинный или содержит недопустимые симфолы';
       }
     });
+    if (hashtags.length > 5) {
+      error = 'Указано больше 5 хэштегов';
+    }
     return error;
   };
 
@@ -187,11 +194,12 @@ var hashtagsInput = document.querySelector('.text__hashtags');
     var err = validateHashtags();
     hashtagsInput.setCustomValidity(err);
     if (!hashtagsInput.checkValidity()) {
+      hashtagsInput.style.borderColor = 'red';
       e.preventDefault();
       hashtagsInput.onchange = function () {
         hashtagsInput.setCustomValidity('');
+        hashtagsInput.style.borderColor = '';
       };
     }
-    hashtagsInput.onchange = null;
   });
 })();
