@@ -1,4 +1,5 @@
 'use strict';
+var hashtagsInput = document.querySelector('.text__hashtags');
 (function () {
   var effectsList = {
     'chrome': {
@@ -43,8 +44,10 @@
 
   var scaleInput = document.querySelector('.scale__control--value');
   var effectsRadio = document.querySelectorAll('.img-upload__effects input[type="radio"]');
-  var scaleVal = scaleInput.value.split('%')[0];
-
+  var getScale = function () {
+    var scaleVal = scaleInput.value.split('%')[0];
+    return scaleVal;
+  };
   var effectLevel = document.querySelector('.img-upload__effect-level');
 
   var closeLoadPreview = function () {
@@ -72,11 +75,13 @@
   });
 
   scaleUp.addEventListener('click', function () {
+    var scaleVal = getScale();
     scaleVal = scaleVal + 25 > 100 ? 100 : scaleVal + 25;
     scalePreviewImage(scaleVal);
   });
 
   scaleDown.addEventListener('click', function () {
+    var scaleVal = getScale();
     scaleVal = scaleVal - 25 < 25 ? 25 : scaleVal - 25;
     scalePreviewImage(scaleVal);
   });
@@ -157,6 +162,8 @@
 
   var commentInput = document.querySelector('.text__description');
 
+  var uploadForm = document.querySelector('.img-upload__form');
+
   commentInput.addEventListener('focus', function () {
     document.removeEventListener('keydown', onPreviewEscPress);
   });
@@ -164,5 +171,35 @@
   commentInput.addEventListener('blur', function () {
     document.addEventListener('keydown', onPreviewEscPress);
   });
-})();
 
+  var validateHashtags = function () {
+    var error = '';
+    var hashtagsVal = hashtagsInput.value.trim();
+    if (hashtagsVal.match(/(#[-\w]{1,19}\b)(\s)(\1|.+\1\b)/gi)) {
+      error = 'Хэштеги не должны повторяться';
+    }
+    var hashtags = hashtagsVal.split(' ');
+    hashtags.forEach(function (hashtag) {
+      if (!hashtag.match(/#[-\w]{1,19}\b\s?/)) {
+        error = 'Хэштег слишком длинный или содержит недопустимые симфолы';
+      }
+    });
+    if (hashtags.length > 5) {
+      error = 'Указано больше 5 хэштегов';
+    }
+    return error;
+  };
+
+  uploadForm.addEventListener('submit', function (e) {
+    var err = validateHashtags();
+    hashtagsInput.setCustomValidity(err);
+    if (!hashtagsInput.checkValidity()) {
+      hashtagsInput.style.borderColor = 'red';
+      e.preventDefault();
+      hashtagsInput.onchange = function () {
+        hashtagsInput.setCustomValidity('');
+        hashtagsInput.style.borderColor = '';
+      };
+    }
+  });
+})();
