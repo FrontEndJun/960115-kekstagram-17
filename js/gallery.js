@@ -1,4 +1,5 @@
 'use strict';
+var bigPic = document.querySelector('.big-picture');
 (function () {
   var timer;
   var picsData = [];
@@ -11,7 +12,7 @@
   var filterPopular = filterForm.querySelector('#filter-popular');
   var filterNew = filterForm.querySelector('#filter-new');
   var filterDisc = filterForm.querySelector('#filter-discussed');
-  var bigPic = document.querySelector('.big-picture');
+
 
   var renderGallery = function (p) {
     clearGallery();
@@ -104,6 +105,7 @@
   commentInner.appendChild(commentImg);
   commentInner.appendChild(commentText);
   var showBigPicture = function (pic) {
+    window.popupOnEscClose(closeBigPicture);
     var comments = bigPic.querySelector('.social__comments');
     while (comments.firstChild) {
       comments.removeChild(comments.firstChild);
@@ -127,22 +129,14 @@
 
   var closeBigPicture = function () {
     bigPic.classList.add('hidden');
-    document.removeEventListener('keydown', onBigPictureEscPress);
   };
-
-  var onBigPictureEscPress = function (e) {
-    if (e.keyCode === 27) {
-      closeBigPicture();
-    }
-  };
-
   var findPic = function (arr, source) {
     return arr.find(function (picture) {
       return picture.url === source;
     });
   };
 
-  window.getAjax('GET', 'https://js.dump.academy/kekstagram/data', function (data) {
+  window.getAjax('https://js.dump.academy/kekstagram/data', function (data) {
     picsData = data;
     renderGallery(data);
     imgFilters.classList.remove('img-filters--inactive');
@@ -150,7 +144,8 @@
       var closeBigPictureButton = bigPic.querySelector('#picture-cancel');
       var pictures = picturesBlock.querySelectorAll('.picture');
       closeBigPictureButton.addEventListener('click', closeBigPicture);
-      document.addEventListener('keydown', onBigPictureEscPress);
+
+      // document.addEventListener('keydown', onBigPictureEscPress);
       var tg = e.target;
       pictures.forEach(function (elm) {
         while (tg !== picturesBlock) {
@@ -158,6 +153,7 @@
             var picSource = elm.querySelector('img').getAttribute('src');
             var picture = findPic(picsData, picSource);
             showBigPicture(picture);
+
           }
           tg = tg.parentNode;
         }

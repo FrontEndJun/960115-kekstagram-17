@@ -1,7 +1,11 @@
 'use strict';
-var hashtagsInput = document.querySelector('.text__hashtags');
 (function () {
   var effectsList = {
+    'none': {
+      style: ' ',
+      min: 0,
+      max: 0,
+    },
     'chrome': {
       style: 'grayscale',
       min: 0,
@@ -35,39 +39,35 @@ var hashtagsInput = document.querySelector('.text__hashtags');
   };
   var previewImg = document.querySelector('.img-upload__preview img');
 
-  var uploadFile = document.getElementById('upload-file');
+  var uploadFile = document.querySelector('#upload-file');
   var uploadPreview = document.querySelector('.img-upload__overlay');
 
-  var previewClose = document.getElementById('upload-cancel');
+  var previewClose = document.querySelector('#upload-cancel');
   var scaleUp = document.querySelector('.scale__control--bigger');
   var scaleDown = document.querySelector('.scale__control--smaller');
 
   var scaleInput = document.querySelector('.scale__control--value');
   var effectsRadio = document.querySelectorAll('.img-upload__effects input[type="radio"]');
   var getScale = function () {
-    var scaleVal = scaleInput.value.split('%')[0];
-    return scaleVal;
+    return scaleInput.value.split('%')[0];
   };
   var effectLevel = document.querySelector('.img-upload__effect-level');
 
   var closeLoadPreview = function () {
     uploadPreview.classList.add('hidden');
     uploadFile.value = '';
-    document.removeEventListener('keydown', onPreviewEscPress);
+    commentInput.value = '';
+    hashtagsInput.value = '';
+
+    // document.removeEventListener('keydown', onPreviewEscPress);
     resetEffects();
   };
-  var onPreviewEscPress = function (e) {
-    if (e.keyCode === 27) {
-      closeLoadPreview();
-    }
-  };
-
   effectLevel.classList.add('hidden');
 
   uploadFile.addEventListener('change', function () {
     uploadPreview.classList.remove('hidden');
 
-    document.addEventListener('keydown', onPreviewEscPress);
+    window.popupOnEscClose(closeLoadPreview);
   });
 
   previewClose.addEventListener('click', function () {
@@ -104,22 +104,21 @@ var hashtagsInput = document.querySelector('.text__hashtags');
     effectsRadio[i].addEventListener('click', function (e) {
       var effectName = e.target.value;
       if (effectName === 'none') {
-        effectLevel.classList.add('hidden');
-        return;
+        resetEffects();
       } else {
         effectLevel.classList.remove('hidden');
+        thumbElem.style.left = '100%';
+        progressLine.style.width = '100%';
       }
       currEffect = effectsList[effectName];
-      previewImg.className = 'effects__preview--' + effectName;
-      previewImg.style = ' ';
       renderPreviewImage(currEffect.max);
+      previewImg.className = 'effects__preview--' + effectName;
       scalePreviewImage(100);
-      thumbElem.style.left = '100%';
-      progressLine.style.width = '100%';
     });
   }
 
   var resetEffects = function () {
+    previewImg.removeAttribute('style');
     previewImg.className = 'effects__preview--none';
     effectLevel.classList.add('hidden');
     scalePreviewImage(100);
@@ -143,7 +142,7 @@ var hashtagsInput = document.querySelector('.text__hashtags');
       thumbElem.style.left = newLeft + 'px';
       progressLine.style.width = newLeft + 'px';
       var val = window.utils.remap(newLeft, 0, rightEdge, 0, 100);
-      effectValInput.value = val;
+      effectValInput.value = Math.round(val);
       val = window.utils.remap(newLeft, 0, rightEdge, currEffect.min, currEffect.max);
       renderPreviewImage(val);
     };
@@ -165,23 +164,55 @@ var hashtagsInput = document.querySelector('.text__hashtags');
   var uploadForm = document.querySelector('.img-upload__form');
 
   commentInput.addEventListener('focus', function () {
-    document.removeEventListener('keydown', onPreviewEscPress);
+    window.popupOnEscClose(function () {
+    });
   });
 
   commentInput.addEventListener('blur', function () {
-    document.addEventListener('keydown', onPreviewEscPress);
+    window.popupOnEscClose(closeLoadPreview);
   });
 
+  var showMessage = function (type) {
+    var template = document.getElementById(type).content;
+    var message = template.cloneNode(true);
+    document.body.querySelector('main').appendChild(message);
+    message = document.querySelector('.' + type);
+    var closeButtons = message.querySelectorAll('.' + type + '__button');
+    closeButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        message.remove();
+      });
+    });
+    message.addEventListener('click', function (e) {
+      var tg = e.target;
+      if (tg.querySelector('.' + type + '__inner')) {
+        message.remove();
+      }
+    });
+    window.popupOnEscClose(function () {
+      message.remove();
+    });
+  };
+
+  var hashtagsInput = document.querySelector('.text__hashtags');
+
+  hashtagsInput.addEventListener('focus', function () {
+    window.popupOnEscClose(function () {
+    });
+  });
+  hashtagsInput.addEventListener('blur', function () {
+    window.popupOnEscClose(closeLoadPreview);
+  });
   var validateHashtags = function () {
     var error = '';
     var hashtagsVal = hashtagsInput.value.trim();
     if (hashtagsVal.match(/(#[-\w]{1,19}\b)(\s)(\1|.+\1\b)/gi)) {
       error = 'Хэштеги не должны повторяться';
     }
-    var hashtags = hashtagsVal.split(' ');
+    var hashtags = hashtagsVal.split(/\s+/);
     hashtags.forEach(function (hashtag) {
-      if (!hashtag.match(/#[-\w]{1,19}\b\s?/)) {
-        error = 'Хэштег слишком длинный или содержит недопустимые симфолы';
+      if (!hashtag.match(/|#[-\w]{1,19}\b\s?/)) {
+        error = 'Хэштег слишком длинный или содержит недопустимые символы';
       }
     });
     if (hashtags.length > 5) {
@@ -189,17 +220,26 @@ var hashtagsInput = document.querySelector('.text__hashtags');
     }
     return error;
   };
-
   uploadForm.addEventListener('submit', function (e) {
     var err = validateHashtags();
     hashtagsInput.setCustomValidity(err);
+    e.preventDefault();
     if (!hashtagsInput.checkValidity()) {
       hashtagsInput.style.borderColor = 'red';
-      e.preventDefault();
       hashtagsInput.onchange = function () {
         hashtagsInput.setCustomValidity('');
         hashtagsInput.style.borderColor = '';
       };
+    } else {
+      var formData = new FormData(document.forms[1]);
+      window.sendAjax('https://js.dump.academy/kekstagram', formData, function (status) {
+        closeLoadPreview();
+        if (status === 200) {
+          showMessage('success');
+        } else {
+          showMessage('error');
+        }
+      });
     }
   });
 })();

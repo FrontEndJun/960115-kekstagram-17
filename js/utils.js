@@ -1,5 +1,14 @@
 'use strict';
 (function () {
+  window.popupOnEscClose = function (action) {
+    var onEscPress = function (e) {
+      if (e.keyCode === 27) {
+        action();
+        document.onkeydown = null;
+      }
+    };
+    document.onkeydown = onEscPress;
+  };
   var utils = window.utils;
   window.utils = {
     getRandomInt: function (min, max) {
