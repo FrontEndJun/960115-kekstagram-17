@@ -40,7 +40,7 @@
 
   var FormModal = function () {
     window.Modal.apply(this, arguments);
-  }
+  };
   FormModal.prototype = Object.create(window.Modal.prototype);
   FormModal.prototype.hide = function () {
     window.Modal.prototype.hide.apply(this);
@@ -48,11 +48,11 @@
     commentInput.value = '';
     hashtagsInput.value = '';
     resetEffects();
-  }
+  };
   var previewImg = document.querySelector('.img-upload__preview img');
 
   var uploadFile = document.querySelector('#upload-file');
-  var uploadPreview = new FormModal({overlaySelector: '.img-upload__overlay', closeButtonSelector: '#upload-cancel'})
+  var uploadPreview = new FormModal({overlaySelector: '.img-upload__overlay', closeButtonSelector: '#upload-cancel'});
 
   // var previewClose = document.querySelector('#upload-cancel');
   var scaleUp = document.querySelector('.scale__control--bigger');
@@ -172,8 +172,8 @@
     this.template = props.template;
     document.body.querySelector('main').appendChild(this.template);
     window.Modal.apply(this, arguments);
-    this.show();
-  }
+
+  };
   Message.prototype = Object.create(window.Modal.prototype);
   Message.prototype.hide = function () {
     window.Modal.prototype.hide.apply(this);
@@ -185,6 +185,7 @@
     var template = document.getElementById(type).content;
     var messageTemplate = template.cloneNode(true);
     var messageModal = new Message({template: messageTemplate, overlaySelector: '.' + type, onOverlayClickCloseModal: true, modalInnerSelector: '.' + type + '__inner', closeButtonSelector: '.' + type + '__button'});
+    messageModal.show();
   };
 
   var hashtagsInput = document.querySelector('.text__hashtags');

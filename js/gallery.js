@@ -15,7 +15,7 @@
 
   var BigPictureModal = function () {
     window.Modal.apply(this, arguments);
-  }
+  };
   BigPictureModal.prototype = Object.create(window.Modal.prototype);
   BigPictureModal.prototype.render = function (pic) {
     var comments = this.modalOverlay.querySelector('.social__comments');
@@ -35,8 +35,8 @@
       comments.appendChild(c);
     });
     this.show();
-  }
-  var bigPhoto = new BigPictureModal({overlaySelector: '.big-picture', closeButtonSelector: '#picture-cancel'})
+  };
+  var bigPhoto = new BigPictureModal({overlaySelector: '.big-picture', closeButtonSelector: '#picture-cancel'});
 
   var renderGallery = function (p) {
     clearGallery();
