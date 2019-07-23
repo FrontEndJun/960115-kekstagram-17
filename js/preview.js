@@ -37,12 +37,24 @@
       units: ''
     },
   };
+
+  var FormModal = function () {
+    window.Modal.apply(this, arguments);
+  }
+  FormModal.prototype = Object.create(window.Modal.prototype);
+  FormModal.prototype.hide = function () {
+    window.Modal.prototype.hide.apply(this);
+    uploadFile.value = '';
+    commentInput.value = '';
+    hashtagsInput.value = '';
+    resetEffects();
+  }
   var previewImg = document.querySelector('.img-upload__preview img');
 
   var uploadFile = document.querySelector('#upload-file');
-  var uploadPreview = document.querySelector('.img-upload__overlay');
+  var uploadPreview = new FormModal({overlaySelector: '.img-upload__overlay', closeButtonSelector: '#upload-cancel'})
 
-  var previewClose = document.querySelector('#upload-cancel');
+  // var previewClose = document.querySelector('#upload-cancel');
   var scaleUp = document.querySelector('.scale__control--bigger');
   var scaleDown = document.querySelector('.scale__control--smaller');
 
@@ -53,27 +65,12 @@
   };
   var effectLevel = document.querySelector('.img-upload__effect-level');
 
-  var closeLoadPreview = function () {
-    uploadPreview.classList.add('hidden');
-    uploadFile.value = '';
-    commentInput.value = '';
-    hashtagsInput.value = '';
-
-    // document.removeEventListener('keydown', onPreviewEscPress);
-    resetEffects();
-  };
   effectLevel.classList.add('hidden');
 
   uploadFile.addEventListener('change', function () {
-    uploadPreview.classList.remove('hidden');
+    uploadPreview.show();
 
-    window.popupOnEscClose(closeLoadPreview);
   });
-
-  previewClose.addEventListener('click', function () {
-    closeLoadPreview();
-  });
-
   scaleUp.addEventListener('click', function () {
     var scaleVal = getScale();
     scaleVal = scaleVal + 25 > 100 ? 100 : scaleVal + 25;
@@ -164,44 +161,39 @@
   var uploadForm = document.querySelector('.img-upload__form');
 
   commentInput.addEventListener('focus', function () {
-    window.popupOnEscClose(function () {
-    });
+    uploadPreview.onEscPressCloseModal = false;
   });
 
   commentInput.addEventListener('blur', function () {
-    window.popupOnEscClose(closeLoadPreview);
+    uploadPreview.onEscPressCloseModal = true;
   });
+
+  var Message = function (props) {
+    this.template = props.template;
+    document.body.querySelector('main').appendChild(this.template);
+    window.Modal.apply(this, arguments);
+    this.show();
+  }
+  Message.prototype = Object.create(window.Modal.prototype);
+  Message.prototype.hide = function () {
+    window.Modal.prototype.hide.apply(this);
+    this.modalOverlay.remove();
+  };
+
 
   var showMessage = function (type) {
     var template = document.getElementById(type).content;
-    var message = template.cloneNode(true);
-    document.body.querySelector('main').appendChild(message);
-    message = document.querySelector('.' + type);
-    var closeButtons = message.querySelectorAll('.' + type + '__button');
-    closeButtons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        message.remove();
-      });
-    });
-    message.addEventListener('click', function (e) {
-      var tg = e.target;
-      if (tg.querySelector('.' + type + '__inner')) {
-        message.remove();
-      }
-    });
-    window.popupOnEscClose(function () {
-      message.remove();
-    });
+    var messageTemplate = template.cloneNode(true);
+    var messageModal = new Message({template: messageTemplate, overlaySelector: '.' + type, onOverlayClickCloseModal: true, modalInnerSelector: '.' + type + '__inner', closeButtonSelector: '.' + type + '__button'});
   };
 
   var hashtagsInput = document.querySelector('.text__hashtags');
 
   hashtagsInput.addEventListener('focus', function () {
-    window.popupOnEscClose(function () {
-    });
+    uploadPreview.onEscPressCloseModal = false;
   });
   hashtagsInput.addEventListener('blur', function () {
-    window.popupOnEscClose(closeLoadPreview);
+    uploadPreview.onEscPressCloseModal = true;
   });
   var validateHashtags = function () {
     var error = '';
@@ -233,7 +225,7 @@
     } else {
       var formData = new FormData(document.forms[1]);
       window.sendAjax('https://js.dump.academy/kekstagram', formData, function (status) {
-        closeLoadPreview();
+        uploadPreview.hide();
         if (status === 200) {
           showMessage('success');
         } else {
@@ -243,3 +235,4 @@
     }
   });
 })();
+
