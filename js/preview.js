@@ -37,7 +37,6 @@
       units: ''
     },
   };
-
   var FormModal = function () {
     window.Modal.apply(this, arguments);
   };
@@ -50,14 +49,10 @@
     resetEffects();
   };
   var previewImg = document.querySelector('.img-upload__preview img');
-
   var uploadFile = document.querySelector('#upload-file');
   var uploadPreview = new FormModal({overlaySelector: '.img-upload__overlay', closeButtonSelector: '#upload-cancel'});
-
-  // var previewClose = document.querySelector('#upload-cancel');
   var scaleUp = document.querySelector('.scale__control--bigger');
   var scaleDown = document.querySelector('.scale__control--smaller');
-
   var scaleInput = document.querySelector('.scale__control--value');
   var effectsRadio = document.querySelectorAll('.img-upload__effects input[type="radio"]');
   var getScale = function () {

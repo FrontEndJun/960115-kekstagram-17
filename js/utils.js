@@ -51,33 +51,6 @@
       });
     }
   };
-
-
-  //   this.closeModal = function () {
-
-  //     var modalOverlay = document.querySelector(this.selector);
-  //     if (modalOverlay) {
-  //       modalOverlay.classList.add('hidden');
-  //     }
-  //   };
-  //   this.openModal = function () {
-  //     var modalOverlay = document.querySelector(this.selector);
-  //     if (modalOverlay) {
-  //       modalOverlay.classList.remove('hidden');
-  //     }
-  //   };
-  //
-  //   this.onDocumentKeyDown = function (e) {
-  //     if (e.keyCode !== 27) {
-  //       return;
-  //     }
-  //     this.closeModal();
-  //   };
-  //
-  //   this.onCrossButtonClick = function () {
-  //     this.closeModal();
-  //   };
-  // };
   var utils = window.utils;
   window.utils = {
     getRandomInt: function (min, max) {

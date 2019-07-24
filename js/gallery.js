@@ -128,31 +128,6 @@
   commentText.classList.add('social__text');
   commentInner.appendChild(commentImg);
   commentInner.appendChild(commentText);
-  // var showBigPicture = function (pic) {
-  //   var comments = bigPic.querySelector('.social__comments');
-  //   while (comments.firstChild) {
-  //     comments.removeChild(comments.firstChild);
-  //   }
-  //   bigPic.querySelector('.social__comment-count').classList.add('hidden');
-  //   bigPic.querySelector('.comments-loader').classList.add('hidden');
-  //   bigPic.classList.remove('hidden');
-  //   bigPic.querySelector('.big-picture__img img').src = pic.url;
-  //   bigPic.querySelector('.likes-count').textContent = pic.likes;
-  //   bigPic.querySelector('.comments-count').textContent = pic.comments.length;
-  //   bigPic.querySelector('.social__caption').textContent = pic.description;
-  //   pic.comments.forEach(function (comm) {
-  //     var c = commentInner.cloneNode(true);
-  //     c.querySelector('img').src = comm.avatar;
-  //     c.querySelector('p').innerHTML = comm.message;
-  //
-  //     // comments.appendChild(commentInner);
-  //     comments.appendChild(c);
-  //   });
-  // };
-
-  // var closeBigPicture = function () {
-  //   bigPic.classList.add('hidden');
-  // };
   var findPic = function (arr, source) {
     return arr.find(function (picture) {
       return picture.url === source;
