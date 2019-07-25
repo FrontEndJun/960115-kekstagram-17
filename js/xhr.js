@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  window.getAjax = function (method, url, callback) {
+  window.getAjax = function (url, callback) {
     var xhr = new XMLHttpRequest();
     var res = 0;
     xhr.onreadystatechange = function () {
@@ -13,7 +13,18 @@
         callback(res);
       }
     };
-    xhr.open(method, url);
+    xhr.open('GET', url);
     xhr.send();
+  };
+
+  window.sendAjax = function (url, data, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        callback(xhr.status);
+      }
+    };
+    xhr.open('POST', url);
+    xhr.send(data);
   };
 })();

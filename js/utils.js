@@ -1,5 +1,56 @@
 'use strict';
 (function () {
+  window.popupOnEscClose = function (action) {
+    document.onkeydown = function (e) {
+      if (e.keyCode === 27) {
+        action();
+        document.onkeydown = null;
+      }
+    };
+  };
+
+  window.Modal = function (props) {
+    this.modalOverlay = document.querySelector(props.overlaySelector);
+    if (props.modalInnerSelector) {
+      this.modalInnerSelector = props.modalInnerSelector;
+    }
+    this.onOverlayClickCloseModal = props.onOverlayClickCloseModal || false;
+    if (!this.modalOverlay) {
+      return;
+    }
+    this.closeButtons = this.modalOverlay.querySelectorAll(props.closeButtonSelector);
+    this.escPressHandler = this.onEscPress.bind(this);
+    this.onEscPressCloseModal = props.onEscPressCloseModal || true;
+  };
+  window.Modal.prototype.onEscPress = function (e) {
+    if (!this.onEscPressCloseModal) {
+      return;
+    }
+    if (e.keyCode !== 27) {
+      return;
+    }
+    this.hide();
+  };
+  window.Modal.prototype.hide = function () {
+    this.modalOverlay.classList.add('hidden');
+    document.removeEventListener('keydown', this.escPressHandler);
+  };
+  window.Modal.prototype.show = function () {
+    var self = this;
+    this.modalOverlay.classList.remove('hidden');
+    document.addEventListener('keydown', this.escPressHandler);
+    this.closeButtons.forEach(function (button) {
+      button.addEventListener('click', self.hide.bind(self));
+    });
+    if (this.modalInnerSelector && this.onOverlayClickCloseModal) {
+      this.modalOverlay.addEventListener('click', function (e) {
+        var tg = e.target;
+        if (tg.querySelector(self.modalInnerSelector)) {
+          self.modalOverlay.remove();
+        }
+      });
+    }
+  };
   var utils = window.utils;
   window.utils = {
     getRandomInt: function (min, max) {
