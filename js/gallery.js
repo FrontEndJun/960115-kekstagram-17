@@ -12,28 +12,44 @@
   var filterPopular = filterForm.querySelector('#filter-popular');
   var filterNew = filterForm.querySelector('#filter-new');
   var filterDisc = filterForm.querySelector('#filter-discussed');
-
   var BigPictureModal = function () {
     window.Modal.apply(this, arguments);
   };
   BigPictureModal.prototype = Object.create(window.Modal.prototype);
+  BigPictureModal.prototype.showComments = function (comments) {
+    var self = this;
+    var counter = 0;
+    do {
+      var comment = comments.pop();
+      var c = commentInner.cloneNode(true);
+
+      c.querySelector('img').alt = comment.name;
+      c.querySelector('img').src = comment.avatar;
+      c.querySelector('p').innerHTML = comment.message;
+      self.modalOverlay.querySelector('.social__comments').appendChild(c);
+      if (!comments[0]) {
+        this.modalOverlay.querySelector('.comments-loader').classList.add('hidden');
+        this.modalOverlay.querySelector('.comments-loader').onclick = null;
+      }
+    } while (++counter < 5 && comments[0]);
+  }
   BigPictureModal.prototype.render = function (pic) {
+    var self = this;
     var comments = this.modalOverlay.querySelector('.social__comments');
+    var commentsList = pic.comments.slice().reverse();
     while (comments.firstChild) {
       comments.removeChild(comments.firstChild);
     }
-    this.modalOverlay.querySelector('.social__comment-count').classList.add('hidden');
-    this.modalOverlay.querySelector('.comments-loader').classList.add('hidden');
+    this.modalOverlay.querySelector('.comments-loader').classList.remove('hidden');
+    // this.modalOverlay.querySelector('.social__comment-count').classList.add('hidden');
     this.modalOverlay.querySelector('.big-picture__img img').src = pic.url;
     this.modalOverlay.querySelector('.likes-count').textContent = pic.likes;
     this.modalOverlay.querySelector('.comments-count').textContent = pic.comments.length;
     this.modalOverlay.querySelector('.social__caption').textContent = pic.description;
-    pic.comments.forEach(function (comm) {
-      var c = commentInner.cloneNode(true);
-      c.querySelector('img').src = comm.avatar;
-      c.querySelector('p').innerHTML = comm.message;
-      comments.appendChild(c);
-    });
+    this.showComments(commentsList);
+    this.modalOverlay.querySelector('.comments-loader').onclick = function () {
+      self.showComments(commentsList);
+    };
     this.show();
   };
   var bigPhoto = new BigPictureModal({overlaySelector: '.big-picture', closeButtonSelector: '#picture-cancel'});
