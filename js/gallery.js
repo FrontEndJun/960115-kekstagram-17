@@ -32,7 +32,7 @@
         this.modalOverlay.querySelector('.comments-loader').onclick = null;
       }
     } while (++counter < 5 && comments[0]);
-  }
+  };
   BigPictureModal.prototype.render = function (pic) {
     var self = this;
     var comments = this.modalOverlay.querySelector('.social__comments');
