@@ -68,7 +68,7 @@
     reader.onload = function (evt) {
       previewImg.src = evt.target.result;
       uploadPreview.show();
-    }
+    };
     reader.readAsDataURL(loadedImage);
 
   });
