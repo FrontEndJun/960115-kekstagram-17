@@ -62,8 +62,15 @@
 
   effectLevel.classList.add('hidden');
 
-  uploadFile.addEventListener('change', function () {
-    uploadPreview.show();
+  uploadFile.addEventListener('change', function (e) {
+    debugger
+    var loadedImage = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function (evt) {
+      previewImg.src = evt.target.result;
+      uploadPreview.show();
+    }
+    reader.readAsDataURL(loadedImage);
 
   });
   scaleUp.addEventListener('click', function () {
