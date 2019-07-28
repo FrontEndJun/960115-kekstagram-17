@@ -63,7 +63,6 @@
   effectLevel.classList.add('hidden');
 
   uploadFile.addEventListener('change', function (e) {
-    debugger
     var loadedImage = e.target.files[0];
     var reader = new FileReader();
     reader.onload = function (evt) {
