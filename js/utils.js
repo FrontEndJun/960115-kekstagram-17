@@ -1,14 +1,5 @@
 'use strict';
 (function () {
-  window.popupOnEscClose = function (action) {
-    document.onkeydown = function (e) {
-      if (e.keyCode === 27) {
-        action();
-        document.onkeydown = null;
-      }
-    };
-  };
-
   window.Modal = function (props) {
     this.modalOverlay = document.querySelector(props.overlaySelector);
     if (props.modalInnerSelector) {
