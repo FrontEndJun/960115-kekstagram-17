@@ -218,11 +218,11 @@
   var onSuccessFormLoad = function () {
     uploadPreview.hide();
     showMessage('success');
-  }
+  };
   var onErrorFormLoad = function () {
     uploadPreview.hide();
     showMessage('error');
-  }
+  };
   uploadForm.addEventListener('submit', function (e) {
     var err = validateHashtags();
     hashtagsInput.setCustomValidity(err);
