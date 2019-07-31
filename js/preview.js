@@ -205,7 +205,7 @@
     }
     var hashtags = hashtagsVal.split(/\s+/);
     hashtags.forEach(function (hashtag) {
-      var hashtagTest = /#[-a-zA-z0-9_]{1,19}\b\s?/.test(hashtag);
+      var hashtagTest = hashtag.match(/^#[-a-zA-z0-9_]{1,19}$/);
       if (!hashtagTest && hashtag) {
         error = 'Хэштег слишком длинный, содержит недопустимые символы или состоит только из `#`';
       }
@@ -235,7 +235,7 @@
       };
     } else {
       var formData = new FormData(document.forms[1]);
-      window.sendAjaxFormData(formData);
+      window.sendAjaxFormData(formData, onSuccessFormLoad, onErrorFormLoad);
     }
   });
 })();

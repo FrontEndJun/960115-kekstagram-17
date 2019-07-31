@@ -21,7 +21,6 @@
 
   window.sendAjaxFormData = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
-    onSuccess = onSuccess || function () {};
     onError = onError || function () {};
     xhr.onreadystatechange = function () {
       if (xhr.readyState === READY) {
