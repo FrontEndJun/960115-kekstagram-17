@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var ESC = 27;
   window.Modal = function (props) {
     this.modalOverlay = document.querySelector(props.overlaySelector);
     if (props.modalInnerSelector) {
@@ -17,7 +18,7 @@
     if (!this.onEscPressCloseModal) {
       return;
     }
-    if (e.keyCode !== 27) {
+    if (e.keyCode !== ESC) {
       return;
     }
     this.hide();

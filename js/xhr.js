@@ -1,10 +1,12 @@
 'use strict';
 (function () {
+  var READY = 4;
+  var SUCCESS_STATUS = 200;
   window.getAjax = function (url, callback) {
     var xhr = new XMLHttpRequest();
     var res = 0;
     xhr.onreadystatechange = function () {
-      if (xhr.status === 200 && xhr.readyState === 4) {
+      if (xhr.status === SUCCESS_STATUS && xhr.readyState === READY) {
         try {
           res = JSON.parse(xhr.responseText);
         } catch (err) {
@@ -17,14 +19,19 @@
     xhr.send();
   };
 
-  window.sendAjax = function (url, data, callback) {
+  window.sendAjaxFormData = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
+    onSuccess = onSuccess || function () {};
+    onError = onError || function () {};
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        callback(xhr.status);
+      if (xhr.readyState === READY) {
+        if (xhr.status !== 200) {
+          onError();
+        }
+        onSuccess();
       }
     };
-    xhr.open('POST', url);
+    xhr.open('POST', 'https://js.dump.academy/kekstagram');
     xhr.send(data);
   };
 })();

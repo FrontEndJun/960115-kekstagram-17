@@ -205,15 +205,24 @@
     }
     var hashtags = hashtagsVal.split(/\s+/);
     hashtags.forEach(function (hashtag) {
-      if (!hashtag.match(/|#[-\w]{1,19}\b\s?/)) {
-        error = 'Хэштег слишком длинный или содержит недопустимые символы';
+      var hashtagTest = /#[-a-zA-z0-9_]{1,19}\b\s?/.test(hashtag);
+      if (!hashtagTest && hashtag) {
+        error = 'Хэштег слишком длинный, содержит недопустимые символы или состоит только из `#`';
       }
     });
     if (hashtags.length > 5) {
-      error = 'Указано больше 5 хэштегов';
+      error = 'Не может быть больше 5 хэштегов';
     }
     return error;
   };
+  var onSuccessFormLoad = function () {
+    uploadPreview.hide();
+    showMessage('success');
+  }
+  var onErrorFormLoad = function () {
+    uploadPreview.hide();
+    showMessage('error');
+  }
   uploadForm.addEventListener('submit', function (e) {
     var err = validateHashtags();
     hashtagsInput.setCustomValidity(err);
@@ -226,14 +235,7 @@
       };
     } else {
       var formData = new FormData(document.forms[1]);
-      window.sendAjax('https://js.dump.academy/kekstagram', formData, function (status) {
-        uploadPreview.hide();
-        if (status === 200) {
-          showMessage('success');
-        } else {
-          showMessage('error');
-        }
-      });
+      window.sendAjaxFormData(formData);
     }
   });
 })();
